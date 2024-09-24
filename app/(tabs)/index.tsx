@@ -1,51 +1,57 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+function 로그찍는함수(btnName: string) {
+  console.log(`HomeScreen: ${btnName} button pressed`);
+}
+
+const 로그찍는화살표함수 = (btnName: string) => {
+  console.log(`HomeScreen: ${btnName} button pressed`);
+};
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">안녕하세요</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">할일 목록을 만들어볼게요!</ThemedText>
-        <ThemedText>
-          추가로 <ThemedText type="defaultSemiBold">메모장</ThemedText>도 만들고
-          싶은데 시간이 부족할 듯
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.container}>
+      <View style={{ width: "100%", paddingHorizontal: 16, rowGap: 24 }}>
+        <TouchableOpacity
+          style={{ ...styles.btn, backgroundColor: "#DEECFF" }}
+          onPress={() => console.log("HomeScreen: Todo button pressed")}
+        >
+          <Text style={styles.btnText}>Todo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ ...styles.btn, backgroundColor: "#B1D1C5" }}
+          onPress={() => 로그찍는함수("Memo")}
+        >
+          <Text style={styles.btnText}>Memo</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+  container: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    backgroundColor: "#111",
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  btn: {
+    width: "100%",
+    height: 120,
+    borderRadius: 8,
+    justifyContent: "center",
+    paddingHorizontal: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+  btnText: {
+    fontSize: 40,
+    fontWeight: "bold",
+    lineHeight: 44,
   },
 });
