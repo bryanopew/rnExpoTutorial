@@ -1,37 +1,73 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from "expo-router";
+import React from "react";
+import { Image, StyleSheet } from "react-native";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: "#019081",
         headerShown: false,
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <Image
+              style={styles.icon}
+              source={
+                focused
+                  ? require("../../assets/icons/home_active_36.png")
+                  : require("../../assets/icons/home_36.png")
+              }
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="todo"
         options={{
-          title: 'Explore',
+          title: "Todo",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <Image
+              style={styles.icon}
+              source={
+                focused
+                  ? require("../../assets/icons/todo_active_36.png")
+                  : require("../../assets/icons/todo_36.png")
+              }
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="memo"
+        options={{
+          title: "Memo",
+          tabBarIcon: ({ color, focused }) => (
+            <Image
+              style={styles.icon}
+              source={
+                focused
+                  ? require("../../assets/icons/memo_active_36.png")
+                  : require("../../assets/icons/memo_36.png")
+              }
+            />
           ),
         }}
       />
     </Tabs>
   );
 }
+
+// icon style
+const styles = StyleSheet.create({
+  icon: {
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

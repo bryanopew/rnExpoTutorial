@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,17 +8,9 @@ import {
 } from "react-native";
 
 const MAIN_PAGE_BTNS = [
-  { name: "Todo", color: "#DEECFF" },
-  { name: "Memo", color: "#B1D1C5" },
+  { name: "Todo", color: "#DEECFF", linkTo: "/todo" },
+  { name: "Memo", color: "#B1D1C5", linkTo: "/memo" },
 ];
-
-function 로그찍는함수(btnName: string) {
-  console.log(`HomeScreen: ${btnName} button pressed`);
-}
-
-const 로그찍는화살표함수 = (btnName: string) => {
-  console.log(`HomeScreen: ${btnName} button pressed`);
-};
 
 export default function HomeScreen() {
   return (
@@ -25,13 +18,13 @@ export default function HomeScreen() {
       <View style={{ width: "100%", paddingHorizontal: 16, rowGap: 24 }}>
         {MAIN_PAGE_BTNS.map((btn) => {
           return (
-            <TouchableOpacity
-              key={btn.name}
-              style={{ ...styles.btn, backgroundColor: btn.color }}
-              onPress={() => 로그찍는화살표함수(btn.name)}
-            >
-              <Text style={styles.btnText}>{btn.name}</Text>
-            </TouchableOpacity>
+            <Link href={btn.linkTo} asChild key={btn.name}>
+              <TouchableOpacity
+                style={{ ...styles.btn, backgroundColor: btn.color }}
+              >
+                <Text style={styles.btnText}>{btn.name}</Text>
+              </TouchableOpacity>
+            </Link>
           );
         })}
       </View>
