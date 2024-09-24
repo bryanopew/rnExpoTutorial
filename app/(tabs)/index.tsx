@@ -6,6 +6,11 @@ import {
   View,
 } from "react-native";
 
+const MAIN_PAGE_BTNS = [
+  { name: "Todo", color: "#DEECFF" },
+  { name: "Memo", color: "#B1D1C5" },
+];
+
 function 로그찍는함수(btnName: string) {
   console.log(`HomeScreen: ${btnName} button pressed`);
 }
@@ -18,18 +23,17 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ width: "100%", paddingHorizontal: 16, rowGap: 24 }}>
-        <TouchableOpacity
-          style={{ ...styles.btn, backgroundColor: "#DEECFF" }}
-          onPress={() => console.log("HomeScreen: Todo button pressed")}
-        >
-          <Text style={styles.btnText}>Todo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ ...styles.btn, backgroundColor: "#B1D1C5" }}
-          onPress={() => 로그찍는함수("Memo")}
-        >
-          <Text style={styles.btnText}>Memo</Text>
-        </TouchableOpacity>
+        {MAIN_PAGE_BTNS.map((btn) => {
+          return (
+            <TouchableOpacity
+              key={btn.name}
+              style={{ ...styles.btn, backgroundColor: btn.color }}
+              onPress={() => 로그찍는화살표함수(btn.name)}
+            >
+              <Text style={styles.btnText}>{btn.name}</Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </SafeAreaView>
   );
