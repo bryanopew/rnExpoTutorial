@@ -6,46 +6,44 @@ import {
   Image,
   TextInput,
   Platform,
+  ScrollView,
 } from "react-native";
 import Constants from "expo-constants";
+
+// 10 temp todos
+const INITIAL_TODOS = [
+  { id: 1, text: "Todo 1" },
+  { id: 2, text: "Todo 2" },
+  { id: 3, text: "Todo 3" },
+  { id: 4, text: "Todo 4" },
+  { id: 5, text: "Todo 5" },
+  { id: 6, text: "Todo 6" },
+  { id: 7, text: "Todo 7" },
+  { id: 8, text: "Todo 8" },
+  { id: 9, text: "Todo 9" },
+  { id: 10, text: "Todo 10" },
+];
 
 const Todo = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.paddingBox}>
-        <Text style={styles.title}>Todo</Text>
-        <View style={styles.line} />
-        <View style={{ rowGap: 24, marginTop: 64 }}>
-          <View style={styles.todoBox}>
-            <Text style={styles.todoText}>Todo 1</Text>
-            <Image
-              source={require("../../assets/icons/trash_24.png")}
-              style={styles.icon}
-            ></Image>
-          </View>
-          <View style={styles.todoBox}>
-            <Text style={styles.todoText}>Todo 2</Text>
-            <Image
-              source={require("../../assets/icons/trash_24.png")}
-              style={styles.icon}
-            ></Image>
-          </View>
-          <View style={styles.todoBox}>
-            <Text style={styles.todoText}>Todo 3</Text>
-            <Image
-              source={require("../../assets/icons/trash_24.png")}
-              style={styles.icon}
-            ></Image>
-          </View>
-          <View style={styles.todoBox}>
-            <Text style={styles.todoText}>Todo 4</Text>
-            <Image
-              source={require("../../assets/icons/trash_24.png")}
-              style={styles.icon}
-            ></Image>
+      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+        <View style={styles.paddingBox}>
+          <Text style={styles.title}>Todo</Text>
+          <View style={styles.line} />
+          <View style={{ rowGap: 24, marginTop: 64 }}>
+            {INITIAL_TODOS.map((todo) => (
+              <View key={todo.id} style={styles.todoBox}>
+                <Text style={styles.todoText}>{todo.text}</Text>
+                <Image
+                  source={require("../../assets/icons/trash_24.png")}
+                  style={styles.icon}
+                ></Image>
+              </View>
+            ))}
           </View>
         </View>
-      </View>
+      </ScrollView>
       <View style={styles.inputBox}>
         <TextInput value="12345" style={styles.textInput} />
         <Image
