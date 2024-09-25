@@ -7,8 +7,11 @@ import {
   TextInput,
   Platform,
   ScrollView,
+  Button,
+  KeyboardAvoidingView,
 } from "react-native";
 import Constants from "expo-constants";
+import { useState } from "react";
 
 // 10 temp todos
 const INITIAL_TODOS = [
@@ -25,32 +28,55 @@ const INITIAL_TODOS = [
 ];
 
 const Todo = () => {
+  // 카운터로 복습하기
+  // const [count, setCount] = useState(0);
+  const [todoText, setTodoText] = useState("");
+  console.log("todoText:", todoText);
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        <View style={styles.paddingBox}>
-          <Text style={styles.title}>Todo</Text>
-          <View style={styles.line} />
-          <View style={{ rowGap: 24, marginTop: 64 }}>
-            {INITIAL_TODOS.map((todo) => (
-              <View key={todo.id} style={styles.todoBox}>
-                <Text style={styles.todoText}>{todo.text}</Text>
-                <Image
-                  source={require("../../assets/icons/trash_24.png")}
-                  style={styles.icon}
-                ></Image>
-              </View>
-            ))}
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
+        {/* 카운터 복습용 */}
+        {/* <Text style={styles.counter}>{count}</Text>
+      <View style={styles.buttonContainer}>
+        <Button title="Increment" onPress={() => setCount(count + 1)} />
+        <Button title="Decrement" onPress={() => setCount(count - 1)} />
+      </View> */}
+        <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+          <View style={styles.paddingBox}>
+            <Text style={styles.title}>Todo</Text>
+            <View style={styles.line} />
+            <View style={{ rowGap: 24, marginTop: 64 }}>
+              {INITIAL_TODOS.map((todo) => (
+                <View key={todo.id} style={styles.todoBox}>
+                  <Text style={styles.todoText}>{todo.text}</Text>
+                  <Image
+                    source={require("../../assets/icons/trash_24.png")}
+                    style={styles.icon}
+                  ></Image>
+                </View>
+              ))}
+            </View>
           </View>
+        </ScrollView>
+        <View style={styles.inputBox}>
+          <TextInput
+            value={todoText}
+            onChangeText={(v) => setTodoText(v)}
+            placeholder="Todo"
+            placeholderTextColor="#8f8f8f"
+            style={styles.textInput}
+            onSubmitEditing={() => {
+              console.log("return!");
+            }}
+            maxLength={30}
+          />
+          <Image
+            source={require("../../assets/icons/plus_36.png")}
+            style={styles.icon}
+          ></Image>
         </View>
-      </ScrollView>
-      <View style={styles.inputBox}>
-        <TextInput value="12345" style={styles.textInput} />
-        <Image
-          source={require("../../assets/icons/plus_36.png")}
-          style={styles.icon}
-        ></Image>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
