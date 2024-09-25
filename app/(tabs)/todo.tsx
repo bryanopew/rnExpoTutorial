@@ -17,22 +17,13 @@ import { useState } from "react";
 const INITIAL_TODOS = [
   { id: 1, text: "Todo 1" },
   { id: 2, text: "Todo 2" },
-  { id: 3, text: "Todo 3" },
-  { id: 4, text: "Todo 4" },
-  { id: 5, text: "Todo 5" },
-  { id: 6, text: "Todo 6" },
-  { id: 7, text: "Todo 7" },
-  { id: 8, text: "Todo 8" },
-  { id: 9, text: "Todo 9" },
-  { id: 10, text: "Todo 10" },
 ];
 
 const Todo = () => {
   const [todoText, setTodoText] = useState("");
   const [todos, setTodos] = useState(INITIAL_TODOS);
-
-  console.log("todos");
-
+  const [selectedTodoIdx, setSelectedTodoIdx] = useState<null | number>(null);
+  console.log("selected todo idx", selectedTodoIdx);
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
@@ -45,7 +36,17 @@ const Todo = () => {
             <View style={styles.line} />
             <View style={{ rowGap: 24, marginTop: 64 }}>
               {todos.map((todo, idx) => (
-                <View key={todo.id} style={styles.todoBox}>
+                <TouchableOpacity
+                  key={todo.id}
+                  style={
+                    selectedTodoIdx === idx
+                      ? styles.selectedTodoBox
+                      : styles.todoBox
+                  }
+                  onPress={() =>
+                    setSelectedTodoIdx((v) => (v === idx ? null : idx))
+                  }
+                >
                   <Text style={styles.todoText}>{todo.text}</Text>
                   <TouchableOpacity
                     style={styles.plusAndDeleteBtn}
@@ -55,6 +56,7 @@ const Todo = () => {
                         const newTodos = v.filter(
                           (_, idx) => idx !== deleteIdx
                         );
+                        selectedTodoIdx === idx && setSelectedTodoIdx(null);
                         return newTodos;
                       });
                     }}
@@ -62,9 +64,9 @@ const Todo = () => {
                     <Image
                       source={require("../../assets/icons/trash_24.png")}
                       style={styles.icon}
-                    ></Image>
+                    />
                   </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           </View>
@@ -84,20 +86,39 @@ const Todo = () => {
           <TouchableOpacity
             style={styles.plusAndDeleteBtn}
             onPress={() => {
-              setTodos((v) => {
-                const newTodoId = v.length === 0 ? 1 : v[v.length - 1].id + 1;
-                const newTodo = { id: newTodoId, text: todoText };
-                const prevTodos = [...v];
-                prevTodos.push(newTodo);
-                return prevTodos;
-              });
-              // setTodos(v => [...v, { id: v.length + 1, text: todoText }]);
+              if (selectedTodoIdx === null) {
+                // 선택된 todo가 없을 때 => 새로운 todo 추가
+                setTodos((v) => {
+                  const newTodoId = v.length === 0 ? 1 : v[v.length - 1].id + 1;
+                  const newTodo = { id: newTodoId, text: todoText };
+                  const prevTodos = [...v];
+                  prevTodos.push(newTodo);
+                  return prevTodos;
+                });
+                // setTodos(v => [...v, { id: v.length + 1, text: todoText }]);
+              } else {
+                // 선택된 todo가 있을 때 => 선택된 todo 변경
+                setTodos((v) => {
+                  const changedTodo = {
+                    id: v[selectedTodoIdx].id,
+                    text: todoText,
+                  };
+                  const prevTodos = [...v];
+                  prevTodos[selectedTodoIdx] = changedTodo;
+                  return prevTodos;
+                });
+              }
+
               setTodoText("");
             }}
           >
             <Image
-              source={require("../../assets/icons/plus_36.png")}
-              style={{ ...styles.icon, width: 32, height: 32 }}
+              source={
+                selectedTodoIdx === null
+                  ? require("../../assets/icons/plus_36.png")
+                  : require("../../assets/icons/change_36.png")
+              }
+              style={{ ...styles.icon, width: 36, height: 36 }}
             />
           </TouchableOpacity>
         </View>
@@ -135,6 +156,16 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 8,
     backgroundColor: "#fff",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: 16,
+  },
+  selectedTodoBox: {
+    width: "100%",
+    height: 64,
+    borderRadius: 8,
+    backgroundColor: "#c48a8a",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
