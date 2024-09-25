@@ -9,11 +9,11 @@ import {
   ScrollView,
   Button,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native";
 import Constants from "expo-constants";
 import { useState } from "react";
 
-// 10 temp todos
 const INITIAL_TODOS = [
   { id: 1, text: "Todo 1" },
   { id: 2, text: "Todo 2" },
@@ -28,32 +28,42 @@ const INITIAL_TODOS = [
 ];
 
 const Todo = () => {
-  // 카운터로 복습하기
-  // const [count, setCount] = useState(0);
   const [todoText, setTodoText] = useState("");
-  console.log("todoText:", todoText);
+  const [todos, setTodos] = useState(INITIAL_TODOS);
+
+  console.log("todos");
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="position">
-        {/* 카운터 복습용 */}
-        {/* <Text style={styles.counter}>{count}</Text>
-      <View style={styles.buttonContainer}>
-        <Button title="Increment" onPress={() => setCount(count + 1)} />
-        <Button title="Decrement" onPress={() => setCount(count - 1)} />
-      </View> */}
-        <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 120 }}
+          style={{ height: "100%" }}
+        >
           <View style={styles.paddingBox}>
             <Text style={styles.title}>Todo</Text>
             <View style={styles.line} />
             <View style={{ rowGap: 24, marginTop: 64 }}>
-              {INITIAL_TODOS.map((todo) => (
+              {todos.map((todo, idx) => (
                 <View key={todo.id} style={styles.todoBox}>
                   <Text style={styles.todoText}>{todo.text}</Text>
-                  <Image
-                    source={require("../../assets/icons/trash_24.png")}
-                    style={styles.icon}
-                  ></Image>
+                  <TouchableOpacity
+                    style={styles.plusAndDeleteBtn}
+                    onPress={() => {
+                      setTodos((v) => {
+                        const deleteIdx = idx;
+                        const newTodos = v.filter(
+                          (_, idx) => idx !== deleteIdx
+                        );
+                        return newTodos;
+                      });
+                    }}
+                  >
+                    <Image
+                      source={require("../../assets/icons/trash_24.png")}
+                      style={styles.icon}
+                    ></Image>
+                  </TouchableOpacity>
                 </View>
               ))}
             </View>
@@ -71,10 +81,25 @@ const Todo = () => {
             }}
             maxLength={30}
           />
-          <Image
-            source={require("../../assets/icons/plus_36.png")}
-            style={styles.icon}
-          ></Image>
+          <TouchableOpacity
+            style={styles.plusAndDeleteBtn}
+            onPress={() => {
+              setTodos((v) => {
+                const newTodoId = v.length === 0 ? 1 : v[v.length - 1].id + 1;
+                const newTodo = { id: newTodoId, text: todoText };
+                const prevTodos = [...v];
+                prevTodos.push(newTodo);
+                return prevTodos;
+              });
+              // setTodos(v => [...v, { id: v.length + 1, text: todoText }]);
+              setTodoText("");
+            }}
+          >
+            <Image
+              source={require("../../assets/icons/plus_36.png")}
+              style={{ ...styles.icon, width: 32, height: 32 }}
+            />
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -113,11 +138,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 16,
+    paddingLeft: 16,
   },
   todoText: {
     fontSize: 16,
     color: "#111",
+  },
+  plusAndDeleteBtn: {
+    width: 52,
+    height: 52,
+    alignItems: "center",
+    justifyContent: "center",
   },
   icon: {
     width: 24,
@@ -131,7 +162,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 52,
     backgroundColor: "#fff",
-    paddingHorizontal: 16,
+    paddingLeft: 16,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
